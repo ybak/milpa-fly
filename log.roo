@@ -5,3 +5,5 @@ project --topLevelPackage com.corntree.milpa.fly --projectName milpa-fly --java 
 hint
 hint
 jpa setup --database MYSQL --provider HIBERNATE 
+hint
+entity jpa --class ~.domain.Player --activeRecord
