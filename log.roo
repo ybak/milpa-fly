@@ -1,0 +1,7 @@
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-10-26 16:02:18
+project --topLevelPackage com.corntree.milpa.fly --projectName milpa-fly --java 6 --packaging WAR
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2012-10-26 16:02:24
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-10-26 16:02:33
+hint
+hint
+jpa setup --database MYSQL --provider HIBERNATE 
