@@ -21,9 +21,8 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -40,92 +39,75 @@ import org.jboss.netty.example.localtime.LocalTimeProtocol.Locations;
 /**
  * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
  * @author <a href="http://gleamynode.net/">Trustin Lee</a>
- *
+ * 
  * @version $Rev: 2190 $, $Date: 2010-02-19 18:08:01 +0900 (Fri, 19 Feb 2010) $
  */
 public class LocalTimeClientHandler extends SimpleChannelUpstreamHandler {
 
-    private static final Logger logger = Logger.getLogger(
-            LocalTimeClientHandler.class.getName());
+	private static final Logger logger = Logger.getLogger(LocalTimeClientHandler.class.getName());
 
-    // Stateful properties
-    private volatile Channel channel;
-    private final BlockingQueue<LocalTimes> answer = new LinkedBlockingQueue<LocalTimes>();
+	// Stateful properties
+	private volatile Channel channel;
+	private final BlockingQueue<LocalTimes> answer = new LinkedBlockingQueue<LocalTimes>();
 
-    public List<String> getLocalTimes(Collection<String> cities) {
-        Locations.Builder builder = Locations.newBuilder();
+	public List<String> getLocalTimes(Collection<String> cities) {
+		Locations.Builder builder = Locations.newBuilder();
 
-        for (String c: cities) {
-            String[] components = c.split("/");
-            builder.addLocation(Location.newBuilder().
-                setContinent(Continent.valueOf(components[0].toUpperCase())).
-                setCity(components[1]).build());
-        }
+		for (String c : cities) {
+			String[] components = c.split("/");
+			builder.addLocation(Location.newBuilder().setContinent(Continent.valueOf(components[0].toUpperCase())).setCity(components[1])
+					.build());
+		}
 
-        channel.write(builder.build());
+		channel.write(builder.build());
 
-        LocalTimes localTimes;
-        boolean interrupted = false;
-        for (;;) {
-            try {
-                localTimes = answer.take();
-                break;
-            } catch (InterruptedException e) {
-                interrupted = true;
-            }
-        }
+		LocalTimes localTimes;
+		boolean interrupted = false;
+		for (;;) {
+			try {
+				localTimes = answer.take();
+				break;
+			} catch (InterruptedException e) {
+				interrupted = true;
+			}
+		}
 
-        if (interrupted) {
-            Thread.currentThread().interrupt();
-        }
+		if (interrupted) {
+			Thread.currentThread().interrupt();
+		}
 
-        List<String> result = new ArrayList<String>();
-        for (LocalTime lt: localTimes.getLocalTimeList()) {
-            result.add(
-                    new Formatter().format(
-                            "%4d-%02d-%02d %02d:%02d:%02d %s",
-                            lt.getYear(),
-                            lt.getMonth(),
-                            lt.getDayOfMonth(),
-                            lt.getHour(),
-                            lt.getMinute(),
-                            lt.getSecond(),
-                            lt.getDayOfWeek().name()).toString());
-        }
+		List<String> result = new ArrayList<String>();
+		for (LocalTime lt : localTimes.getLocalTimeList()) {
+			result.add(new Formatter().format("%4d-%02d-%02d %02d:%02d:%02d %s", lt.getYear(), lt.getMonth(), lt.getDayOfMonth(),
+					lt.getHour(), lt.getMinute(), lt.getSecond(), lt.getDayOfWeek().name()).toString());
+		}
 
-        return result;
-    }
+		return result;
+	}
 
-    @Override
-    public void handleUpstream(
-            ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
-        if (e instanceof ChannelStateEvent) {
-            logger.info(e.toString());
-        }
-        super.handleUpstream(ctx, e);
-    }
+	@Override
+	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
+		if (e instanceof ChannelStateEvent) {
+			logger.info(e.toString());
+		}
+		super.handleUpstream(ctx, e);
+	}
 
-    @Override
-    public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e)
-            throws Exception {
-        channel = e.getChannel();
-        super.channelOpen(ctx, e);
-    }
+	@Override
+	public void channelOpen(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+		channel = e.getChannel();
+		super.channelOpen(ctx, e);
+	}
 
-    @Override
-    public void messageReceived(
-            ChannelHandlerContext ctx, final MessageEvent e) {
-        boolean offered = answer.offer((LocalTimes) e.getMessage());
-        assert offered;
-    }
+	@Override
+	public void messageReceived(ChannelHandlerContext ctx, final MessageEvent e) {
+		boolean offered = answer.offer((LocalTimes) e.getMessage());
+		assert offered;
+	}
 
-    @Override
-    public void exceptionCaught(
-            ChannelHandlerContext ctx, ExceptionEvent e) {
-        logger.log(
-                Level.WARNING,
-                "Unexpected exception from downstream.",
-                e.getCause());
-        e.getChannel().close();
-    }
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
+		logger.warn("Unexpected exception from downstream.", e.getCause());
+		e.getChannel().close();
+	}
 }

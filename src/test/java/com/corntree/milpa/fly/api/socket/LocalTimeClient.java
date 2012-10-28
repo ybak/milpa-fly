@@ -26,6 +26,8 @@ import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+import org.jboss.netty.logging.InternalLoggerFactory;
+import org.jboss.netty.logging.Log4JLoggerFactory;
 
 /**
  * Sends a list of continent/city pairs to a {@link LocalTimeServer} to
@@ -38,7 +40,10 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
  */
 public class LocalTimeClient {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] argvs) throws Exception {
+    	InternalLoggerFactory.setDefaultFactory(new Log4JLoggerFactory());
+
+    	String[] args = {"localhost","8080","America/New_York"};
         // Print usage if necessary.
         if (args.length < 3) {
             printUsage();

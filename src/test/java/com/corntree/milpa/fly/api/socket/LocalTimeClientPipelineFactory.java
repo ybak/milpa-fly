@@ -24,6 +24,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.jboss.netty.handler.logging.LoggingHandler;
 
 /**
  * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
@@ -34,6 +35,7 @@ public class LocalTimeClientPipelineFactory implements ChannelPipelineFactory {
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
+        p.addLast("log", new LoggingHandler());
         p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
         p.addLast("protobufDecoder", new ProtobufDecoder(LocalTimeProtocol.LocalTimes.getDefaultInstance()));
 

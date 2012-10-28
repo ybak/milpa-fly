@@ -20,6 +20,8 @@ import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jboss.netty.logging.InternalLoggerFactory;
+import org.jboss.netty.logging.Log4JLoggerFactory;
 
 /**
  * Receives a list of continent/city pairs from a {@link LocalTimeClient} to
@@ -33,6 +35,7 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 public class LocalTimeServer {
 
     public static void main(String[] args) throws Exception {
+    	 InternalLoggerFactory.setDefaultFactory(new Log4JLoggerFactory());
         // Configure the server.
         ServerBootstrap bootstrap = new ServerBootstrap(
                 new NioServerSocketChannelFactory(
