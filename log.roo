@@ -7,3 +7,4 @@ hint
 jpa setup --database MYSQL --provider HIBERNATE 
 hint
 entity jpa --class ~.domain.Player --activeRecord
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2012-10-28 18:03:48
