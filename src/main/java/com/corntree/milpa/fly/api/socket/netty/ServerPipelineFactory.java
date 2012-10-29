@@ -13,34 +13,30 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.corntree.milpa.fly.api.socket;
+package com.corntree.milpa.fly.api.socket.netty;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.example.localtime.LocalTimeProtocol;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-/**
- * @author <a href="http://www.jboss.org/netty/">The Netty Project</a>
- * @author <a href="http://gleamynode.net/">Trustin Lee</a>
- * @version $Rev: 2315 $, $Date: 2010-06-23 14:16:47 +0900 (Wed, 23 Jun 2010) $
- */
-public class LocalTimeServerPipelineFactory implements ChannelPipelineFactory {
+import com.corntree.milpa.fly.protocol.request.Request;
+
+public class ServerPipelineFactory implements ChannelPipelineFactory {
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
         p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-        p.addLast("protobufDecoder", new ProtobufDecoder(LocalTimeProtocol.Locations.getDefaultInstance()));
+        p.addLast("protobufDecoder", new ProtobufDecoder(Request.ClientRequest.getDefaultInstance()));
 
         p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
         p.addLast("protobufEncoder", new ProtobufEncoder());
 
-        p.addLast("handler", new LocalTimeServerHandler());
+        p.addLast("handler", new ServerHandler());
         return p;
     }
 }

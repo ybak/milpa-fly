@@ -1,0 +1,24 @@
+package com.corntree.milpa.fly.protocol.request;
+
+option optimize_for = SPEED;
+
+enum ClientRequestType {
+  REGIST_REQUEST = 0;
+  LOGIN_REQUEST = 1;
+}
+
+message ClientRequest {
+  required ClientRequestType clientRequestType = 1;
+  required bytes packetData = 2;
+}
+
+message RegistRequest {
+  required string username = 1;
+  required string password = 2;
+  optional string email = 3;
+}
+
+message LoginRequest {
+  required string username = 1;
+  required string password = 2;
+}

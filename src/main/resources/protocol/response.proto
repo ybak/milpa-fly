@@ -1,0 +1,13 @@
+package com.corntree.milpa.fly.protocol.response;
+
+option optimize_for = SPEED;
+
+enum ResponseCode {
+  OK = 0;
+  ERROR = 1;
+}
+
+message BaseResponse {
+  required ResponseCode code = 1;
+  optional string desc = 2;
+}
