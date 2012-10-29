@@ -1,6 +1,6 @@
 package com.corntree.milpa.fly.api.socket;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
@@ -12,7 +12,6 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
-import com.corntree.milpa.fly.protocol.response.Response.BaseResponse;
 
 public class ClientHandler extends SimpleChannelUpstreamHandler {
 
@@ -21,13 +20,14 @@ public class ClientHandler extends SimpleChannelUpstreamHandler {
 	// Stateful properties
 	private volatile Channel channel;
 	
-	private BaseResponse response;
+	private AtomicInteger responseCounter = new AtomicInteger(0);
 
-	public void sendRequest(ClientRequest request) throws Exception {
+	public AtomicInteger getResponseCounter() {
+        return responseCounter;
+    }
+
+    public void sendRequest(ClientRequest request) throws Exception {
 		channel.write(request);
-		if(response == null){
-			TimeUnit.SECONDS.sleep(1);
-		}
 	}
 
 	@Override
@@ -46,7 +46,8 @@ public class ClientHandler extends SimpleChannelUpstreamHandler {
 
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, final MessageEvent e) {
-		response  =(BaseResponse)e.getMessage();
+	    responseCounter.incrementAndGet();
+		logger.info(e);
 	}
 
 	@Override

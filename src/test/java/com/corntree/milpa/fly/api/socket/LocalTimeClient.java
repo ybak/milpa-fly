@@ -2,6 +2,7 @@ package com.corntree.milpa.fly.api.socket;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -17,40 +18,44 @@ import com.google.protobuf.ByteString;
 
 public class LocalTimeClient {
 
-	public static void main(String[] argvs) throws Exception {
-		InternalLoggerFactory.setDefaultFactory(new Log4JLoggerFactory());
-		String[] args = { "localhost", "8080" };
+    public static void main(String[] argvs) throws Exception {
+        InternalLoggerFactory.setDefaultFactory(new Log4JLoggerFactory());
+        String[] args = { "localhost", "8080" };
 
-		// Parse options.
-		String host = args[0];
-		int port = Integer.parseInt(args[1]);
+        // Parse options.
+        String host = args[0];
+        int port = Integer.parseInt(args[1]);
 
-		// Set up.
-		ClientBootstrap bootstrap = new ClientBootstrap(
-				new NioClientSocketChannelFactory(
-						Executors.newCachedThreadPool(),
-						Executors.newCachedThreadPool()));
+        // Set up.
+        ClientBootstrap bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(
+                Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 
-		// Configure the event pipeline factory.
-		bootstrap.setPipelineFactory(new LocalTimeClientPipelineFactory());
+        // Configure the event pipeline factory.
+        bootstrap.setPipelineFactory(new LocalTimeClientPipelineFactory());
 
-		// Make a new connection.
-		ChannelFuture connectFuture = bootstrap.connect(new InetSocketAddress(
-				host, port));
+        // Make a new connection.
+        ChannelFuture connectFuture = bootstrap.connect(new InetSocketAddress(host, port));
 
-		// Wait until the connection is made successfully.
-		Channel channel = connectFuture.awaitUninterruptibly().getChannel();
+        // Wait until the connection is made successfully.
+        Channel channel = connectFuture.awaitUninterruptibly().getChannel();
 
-		// Get the handler instance to initiate the request.
-		ClientHandler handler = channel.getPipeline().get(ClientHandler.class);
-		
-		ByteString data = RegistRequest.newBuilder().setUsername("ybak").setPassword("passwd").setEmail("ybak@mail.com").build().toByteString();
-		handler.sendRequest(ClientRequest.newBuilder().setClientRequestType(ClientRequestType.REGIST_REQUEST).setPacketData(data).build());
+            // Get the handler instance to initiate the request.
+            ClientHandler handler = channel.getPipeline().get(ClientHandler.class);
 
-		// Close the connection.
-		channel.close().awaitUninterruptibly();
+        for (int i = 0; i < 100; i++) {
+            ByteString data = RegistRequest.newBuilder().setUsername("ybak").setPassword("passwd")
+                    .setEmail("ybak@mail.com").build().toByteString();
+            handler.sendRequest(ClientRequest.newBuilder().setClientRequestType(ClientRequestType.REGIST_REQUEST)
+                    .setPacketData(data).build());
+        }
+        if(handler.getResponseCounter().intValue() != 100){
+            TimeUnit.MILLISECONDS.sleep(500);
+        }
 
-		// Shut down all thread pools to exit.
-		bootstrap.releaseExternalResources();
-	}
+        // Close the connection.
+        channel.close().awaitUninterruptibly();
+
+        // Shut down all thread pools to exit.
+        bootstrap.releaseExternalResources();
+    }
 }
