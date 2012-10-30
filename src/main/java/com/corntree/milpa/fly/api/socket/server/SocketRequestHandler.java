@@ -16,6 +16,7 @@
 package com.corntree.milpa.fly.api.socket.server;
 
 import org.apache.log4j.Logger;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
@@ -25,16 +26,12 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.corntree.milpa.fly.api.socket.RequestDispatcher;
 import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
-import com.corntree.milpa.fly.protocol.request.Request.LoginRequest;
-import com.corntree.milpa.fly.protocol.request.Request.RegistRequest;
-import com.corntree.milpa.fly.protocol.response.Response.BaseResponse;
-import com.corntree.milpa.fly.protocol.response.Response.ResponseCode;
 
 public class SocketRequestHandler extends SimpleChannelUpstreamHandler {
 
-    private static final Logger logger = Logger.getLogger(SocketRequestHandler.class.getName());
+    public static final Logger logger = Logger.getLogger(SocketRequestHandler.class.getName());
 
-    private RequestDispatcher dispatcher;
+    private RequestDispatcher dispatcher = new RequestDispatcher();
 
     @Override
     public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
@@ -46,19 +43,9 @@ public class SocketRequestHandler extends SimpleChannelUpstreamHandler {
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+        Channel channel = e.getChannel();
         ClientRequest clientRequest = (ClientRequest) e.getMessage();
-        logger.info(clientRequest.getClientRequestType());
-        switch (clientRequest.getClientRequestType()) {
-        case REGIST_REQUEST:
-            RegistRequest registRequest = RegistRequest.parseFrom(clientRequest.getPacketData());
-            logger.info(registRequest);
-            break;
-        case LOGIN_REQUEST:
-            LoginRequest loginRequest = LoginRequest.parseFrom(clientRequest.getPacketData());
-            logger.info(loginRequest);
-            break;
-        }
-        e.getChannel().write(BaseResponse.newBuilder().setCode(ResponseCode.OK).build());
+        dispatcher.dispatchClientRequest(clientRequest, channel);
     }
 
     @Override
