@@ -12,7 +12,7 @@ import org.jboss.netty.handler.logging.LoggingHandler;
 
 import com.corntree.milpa.fly.protocol.response.Response;
 
-public class LocalTimeClientPipelineFactory implements ChannelPipelineFactory {
+public class SocketClientPipelineFactory implements ChannelPipelineFactory {
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
@@ -23,7 +23,7 @@ public class LocalTimeClientPipelineFactory implements ChannelPipelineFactory {
         p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
         p.addLast("protobufEncoder", new ProtobufEncoder());
 
-        p.addLast("handler", new ClientHandler());
+        p.addLast("handler", new SocketClientHandler());
         return p;
     }
 }

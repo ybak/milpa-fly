@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
@@ -16,7 +17,9 @@ import com.corntree.milpa.fly.protocol.request.Request.ClientRequestType;
 import com.corntree.milpa.fly.protocol.request.Request.RegistRequest;
 import com.google.protobuf.ByteString;
 
-public class LocalTimeClient {
+public class SocketClient {
+    private static final Logger logger = Logger.getLogger(SocketClient.class.getName());
+
 
     public static void main(String[] argvs) throws Exception {
         InternalLoggerFactory.setDefaultFactory(new Log4JLoggerFactory());
@@ -31,7 +34,7 @@ public class LocalTimeClient {
                 Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
 
         // Configure the event pipeline factory.
-        bootstrap.setPipelineFactory(new LocalTimeClientPipelineFactory());
+        bootstrap.setPipelineFactory(new SocketClientPipelineFactory());
 
         // Make a new connection.
         ChannelFuture connectFuture = bootstrap.connect(new InetSocketAddress(host, port));
@@ -39,18 +42,19 @@ public class LocalTimeClient {
         // Wait until the connection is made successfully.
         Channel channel = connectFuture.awaitUninterruptibly().getChannel();
 
-            // Get the handler instance to initiate the request.
-            ClientHandler handler = channel.getPipeline().get(ClientHandler.class);
-
+        // Get the handler instance to initiate the request.
+        SocketClientHandler handler = channel.getPipeline().get(SocketClientHandler.class);
+        long now = System.currentTimeMillis();
         for (int i = 0; i < 100; i++) {
             ByteString data = RegistRequest.newBuilder().setUsername("ybak").setPassword("passwd")
                     .setEmail("ybak@mail.com").build().toByteString();
             handler.sendRequest(ClientRequest.newBuilder().setClientRequestType(ClientRequestType.REGIST_REQUEST)
                     .setPacketData(data).build());
         }
-        if(handler.getResponseCounter().intValue() != 100){
-            TimeUnit.MILLISECONDS.sleep(500);
+        while (handler.getResponseCounter().intValue() != 100) {
+            TimeUnit.MILLISECONDS.sleep(10);
         }
+        logger.info(System.currentTimeMillis() - now);
 
         // Close the connection.
         channel.close().awaitUninterruptibly();

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.corntree.milpa.fly.api.socket.netty;
+package com.corntree.milpa.fly.api.socket.server;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 
@@ -26,7 +26,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepend
 
 import com.corntree.milpa.fly.protocol.request.Request;
 
-public class ServerPipelineFactory implements ChannelPipelineFactory {
+public class SocketServerPipelineFactory implements ChannelPipelineFactory {
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
@@ -36,7 +36,7 @@ public class ServerPipelineFactory implements ChannelPipelineFactory {
         p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
         p.addLast("protobufEncoder", new ProtobufEncoder());
 
-        p.addLast("handler", new ServerHandler());
+        p.addLast("handler", new SocketRequestHandler());
         return p;
     }
 }

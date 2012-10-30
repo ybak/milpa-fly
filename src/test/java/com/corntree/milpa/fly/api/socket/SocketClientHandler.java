@@ -13,9 +13,9 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
 
-public class ClientHandler extends SimpleChannelUpstreamHandler {
+public class SocketClientHandler extends SimpleChannelUpstreamHandler {
 
-	private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
+	private static final Logger logger = Logger.getLogger(SocketClientHandler.class.getName());
 
 	// Stateful properties
 	private volatile Channel channel;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.corntree.milpa.fly</groupId>
     <artifactId>milpa-fly</artifactId>
@@ -247,7 +248,7 @@
             <artifactId>protobuf-java</artifactId>
             <version>2.4.1</version>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
@@ -305,9 +306,14 @@
             <artifactId>commons-codec</artifactId>
             <version>1.5</version>
         </dependency>
-    <dependency>
+        <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-jsp</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
             <version>2.2.2</version>
         </dependency>
     </dependencies>
@@ -377,14 +383,14 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
-                                <mkdir dir="target/generated-sources"/>
+                                <mkdir dir="target/generated-sources" />
                                 <exec executable="protoc">
-                                    <arg value="--java_out=target/generated-sources"/>
-                                    <arg value="./src/main/resources/protocol/request.proto"/>
+                                    <arg value="--java_out=target/generated-sources" />
+                                    <arg value="./src/main/resources/protocol/request.proto" />
                                 </exec>
                                 <exec executable="protoc">
-                                    <arg value="--java_out=target/generated-sources"/>
-                                    <arg value="./src/main/resources/protocol/response.proto"/>
+                                    <arg value="--java_out=target/generated-sources" />
+                                    <arg value="./src/main/resources/protocol/response.proto" />
                                 </exec>
                             </tasks>
                             <sourceRoot>target/generated-sources</sourceRoot>

@@ -1,4 +1,4 @@
-package com.corntree.milpa.fly.api.socket.netty;
+package com.corntree.milpa.fly.api.socket.server;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
@@ -16,7 +16,7 @@ public class SocketServer {
 				new NioServerSocketChannelFactory(
 						Executors.newCachedThreadPool(),
 						Executors.newCachedThreadPool()));
-		bootstrap.setPipelineFactory(new ServerPipelineFactory());
+		bootstrap.setPipelineFactory(new SocketServerPipelineFactory());
 		bootstrap.bind(new InetSocketAddress(8080));
 	}
 	
