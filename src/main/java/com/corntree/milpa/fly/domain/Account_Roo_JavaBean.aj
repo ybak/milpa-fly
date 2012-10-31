@@ -16,12 +16,12 @@ privileged aspect Account_Roo_JavaBean {
         this.username = username;
     }
     
-    public String Account.getPassword() {
-        return this.password;
+    public String Account.getHashedPassword() {
+        return this.hashedPassword;
     }
     
-    public void Account.setPassword(String password) {
-        this.password = password;
+    public void Account.setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
     
     public String Account.getEmail() {

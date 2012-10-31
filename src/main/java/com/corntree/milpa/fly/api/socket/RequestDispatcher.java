@@ -9,10 +9,9 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 
 import com.corntree.milpa.fly.api.socket.handler.RequestHandler;
+import com.corntree.milpa.fly.api.socket.util.Responses;
 import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
 import com.corntree.milpa.fly.protocol.request.Request.ClientRequestType;
-import com.corntree.milpa.fly.protocol.response.Response.BaseResponse;
-import com.corntree.milpa.fly.protocol.response.Response.ResponseCode;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class RequestDispatcher {
@@ -30,7 +29,7 @@ public class RequestDispatcher {
                 try {
                     requestHandler.handleRequestData(clientRequest.getPacketData(), channel);
                 } catch (InvalidProtocolBufferException e) {
-                    channel.write(BaseResponse.newBuilder().setCode(ResponseCode.ERROR_BAD_PROTOCOL).build());
+                    channel.write(Responses.RESPONSE_BAD_PROTOCOL);
                 }
             }
         });
