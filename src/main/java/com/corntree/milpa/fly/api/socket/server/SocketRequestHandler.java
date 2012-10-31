@@ -31,7 +31,7 @@ public class SocketRequestHandler extends SimpleChannelUpstreamHandler {
 
     public static final Logger logger = Logger.getLogger(SocketRequestHandler.class.getName());
 
-    private RequestDispatcher dispatcher = new RequestDispatcher();
+    private static RequestDispatcher dispatcher = new RequestDispatcher();
 
     @Override
     public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {

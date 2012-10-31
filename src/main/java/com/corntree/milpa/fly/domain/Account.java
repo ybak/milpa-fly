@@ -7,8 +7,12 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooJpaActiveRecord
-public class Player {
+public class Account {
 
-    public String displayName;
+    public String username;
+    public String password;
+    public String email;
+    
+    public Player player;
     
 }

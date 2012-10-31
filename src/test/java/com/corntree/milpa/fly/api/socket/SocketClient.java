@@ -45,13 +45,13 @@ public class SocketClient {
         // Get the handler instance to initiate the request.
         SocketClientHandler handler = channel.getPipeline().get(SocketClientHandler.class);
         long now = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             ByteString data = RegistRequest.newBuilder().setUsername("ybak").setPassword("passwd")
                     .setEmail("ybak@mail.com").build().toByteString();
             handler.sendRequest(ClientRequest.newBuilder().setClientRequestType(ClientRequestType.REGIST_REQUEST)
                     .setPacketData(data).build());
         }
-        while (handler.getResponseCounter().intValue() != 100) {
+        while (handler.getResponseCounter().intValue() != 1000) {
             TimeUnit.MILLISECONDS.sleep(10);
         }
         logger.info(System.currentTimeMillis() - now);
