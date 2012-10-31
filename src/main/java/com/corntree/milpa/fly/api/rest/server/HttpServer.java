@@ -5,10 +5,14 @@ import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.springframework.stereotype.Component;
 
 public class HttpServer {
     public static void main(String[] args) {
-        // Configure the server.
+        start();
+    }
+
+    private static void start() {
         ServerBootstrap bootstrap = new ServerBootstrap(
                 new NioServerSocketChannelFactory(
                         Executors.newCachedThreadPool(),
