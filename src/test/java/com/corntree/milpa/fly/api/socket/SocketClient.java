@@ -23,7 +23,7 @@ public class SocketClient {
 
     public static void main(String[] argvs) throws Exception {
         InternalLoggerFactory.setDefaultFactory(new Log4JLoggerFactory());
-        String[] args = { "localhost", "8080" };
+        String[] args = { "localhost", "8081" };
 
         // Parse options.
         String host = args[0];

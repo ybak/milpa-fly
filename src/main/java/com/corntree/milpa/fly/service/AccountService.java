@@ -1,12 +1,14 @@
 package com.corntree.milpa.fly.service;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.corntree.milpa.fly.common.ValidateUtil;
 import com.corntree.milpa.fly.domain.Account;
 import com.corntree.milpa.fly.service.exception.BadRequestExecption;
 import com.corntree.milpa.fly.service.exception.IllegalEmailException;
 
+@Service
 public class AccountService {
 
     private static final Logger logger = Logger.getLogger(AccountService.class.getName());

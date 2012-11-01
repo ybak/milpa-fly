@@ -23,10 +23,16 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.corntree.milpa.fly.protocol.request.Request;
 
+@Component
 public class SocketServerPipelineFactory implements ChannelPipelineFactory {
+
+    @Autowired
+    private SocketRequestHandler requestHandler;
 
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
@@ -36,7 +42,8 @@ public class SocketServerPipelineFactory implements ChannelPipelineFactory {
         p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
         p.addLast("protobufEncoder", new ProtobufEncoder());
 
-        p.addLast("handler", new SocketRequestHandler());
+        p.addLast("handler", requestHandler);
         return p;
     }
+    
 }
