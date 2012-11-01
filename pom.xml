@@ -383,14 +383,22 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <tasks>
+                                <delete dir="target/generated-sources" />
                                 <mkdir dir="target/generated-sources" />
                                 <exec executable="protoc">
                                     <arg value="--java_out=target/generated-sources" />
-                                    <arg value="./src/main/resources/protocol/request.proto" />
+                                    <arg value="--proto_path=src/main/resources/protocol" />
+                                    <arg value="./src/main/resources/protocol/commons.proto" />
                                 </exec>
                                 <exec executable="protoc">
                                     <arg value="--java_out=target/generated-sources" />
-                                    <arg value="./src/main/resources/protocol/response.proto" />
+                                    <arg value="--proto_path=src/main/resources/protocol" />
+                                    <arg value="./src/main/resources/protocol/clientPacket.proto" />
+                                </exec>
+                                <exec executable="protoc">
+                                    <arg value="--java_out=target/generated-sources" />
+                                    <arg value="--proto_path=src/main/resources/protocol" />
+                                    <arg value="./src/main/resources/protocol/serverPacket.proto" />
                                 </exec>
                             </tasks>
                             <sourceRoot>target/generated-sources</sourceRoot>

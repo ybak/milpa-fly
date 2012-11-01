@@ -1,0 +1,11 @@
+package com.corntree.milpa.fly.protocol;
+
+option optimize_for = SPEED;
+
+enum PayloadType {
+    TOKEN = 0;
+}
+
+message Token {
+  required string token = 1;
+}

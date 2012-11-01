@@ -1,9 +1,8 @@
-package com.corntree.milpa.fly.api.socket;
+package com.corntree.milpa.fly.common;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.corntree.milpa.fly.common.NamedThreadFactory;
 
 public class ExecutorManager {
 

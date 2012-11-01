@@ -10,7 +10,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.jboss.netty.handler.logging.LoggingHandler;
 
-import com.corntree.milpa.fly.protocol.response.Response;
+import com.corntree.milpa.fly.protocol.ServerPacket;
 
 public class SocketClientPipelineFactory implements ChannelPipelineFactory {
 
@@ -18,7 +18,7 @@ public class SocketClientPipelineFactory implements ChannelPipelineFactory {
         ChannelPipeline p = pipeline();
         p.addLast("log", new LoggingHandler());
         p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-        p.addLast("protobufDecoder", new ProtobufDecoder(Response.BaseResponse.getDefaultInstance()));
+        p.addLast("protobufDecoder", new ProtobufDecoder(ServerPacket.ServerResponse.getDefaultInstance()));
 
         p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
         p.addLast("protobufEncoder", new ProtobufEncoder());

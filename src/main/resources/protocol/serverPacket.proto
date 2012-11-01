@@ -1,0 +1,24 @@
+import "commons.proto";
+
+package com.corntree.milpa.fly.protocol;
+
+option optimize_for = SPEED;
+
+enum ResponseCode {
+    OK = 0;
+    ERROR_UNKOWN = 1;
+    BAD_PROTOCOL = 2;
+    BAD_PARAMETER_EMAIL = 3;
+    BAD_PARAMETER_USERNAME = 4;
+    BAD_PARAMETER_USERNAME_EXIST = 5;
+    BAD_PARAMETER_LOGIN = 6;
+}
+
+message ServerResponse {
+    required ResponseCode code = 1;
+    optional string desc = 2;
+    optional PayloadType payloadType = 3;
+    optional bytes payloadData = 4;
+}
+
+

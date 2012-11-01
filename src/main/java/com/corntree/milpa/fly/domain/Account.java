@@ -39,6 +39,10 @@ public class Account {
         setPassword(password);
     }
 
+    public boolean validatePassword(String password) {
+        return hashedPassword.equals(DigestUtils.sha256Hex(password));
+    }
+    
     public void setPassword(String password) {
         this.hashedPassword = DigestUtils.sha256Hex(password);
     }

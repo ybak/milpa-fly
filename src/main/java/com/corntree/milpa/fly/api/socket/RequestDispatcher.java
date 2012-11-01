@@ -8,8 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.corntree.milpa.fly.api.socket.handler.RequestHandler;
 import com.corntree.milpa.fly.api.socket.util.Responses;
-import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
-import com.corntree.milpa.fly.protocol.request.Request.ClientRequestType;
+import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequest;
+import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequestType;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 @Component
@@ -25,7 +25,7 @@ public class RequestDispatcher {
         String requestTypeName = clientRequestType.name();
         RequestHandler requestHandler = applicationContext.getBean(requestTypeName, RequestHandler.class);
         try {
-            requestHandler.handleRequestData(clientRequest.getPacketData(), channel);
+            requestHandler.handleRequestData(clientRequest.getRequestData(), channel);
         } catch (InvalidProtocolBufferException e) {
             channel.write(Responses.RESPONSE_BAD_PROTOCOL);
         }

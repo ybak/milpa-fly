@@ -11,7 +11,7 @@ import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
-import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
+import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequest;
 
 public class SocketClientHandler extends SimpleChannelUpstreamHandler {
 

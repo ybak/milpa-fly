@@ -12,9 +12,9 @@ import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.logging.InternalLoggerFactory;
 import org.jboss.netty.logging.Log4JLoggerFactory;
 
-import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
-import com.corntree.milpa.fly.protocol.request.Request.ClientRequestType;
-import com.corntree.milpa.fly.protocol.request.Request.DummyRequest;
+import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequest;
+import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequestType;
+import com.corntree.milpa.fly.protocol.ClientPacket.DummyRequest;
 import com.google.protobuf.ByteString;
 
 public class SocketClient {
@@ -49,7 +49,7 @@ public class SocketClient {
             ByteString data = DummyRequest.newBuilder().setUsername("ybak").setPassword("passwd")
                     .setEmail("ybak@mail.com").build().toByteString();
             handler.sendRequest(ClientRequest.newBuilder().setClientRequestType(ClientRequestType.DUMMY_REQUEST)
-                    .setPacketData(data).build());
+                    .setRequestData(data).build());
         }
         while (handler.getResponseCounter().intValue() != 1000) {
             TimeUnit.MILLISECONDS.sleep(10);
