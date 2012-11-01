@@ -1,4 +1,4 @@
-package com.corntree.milpa.fly.api.socket;
+package com.corntree.milpa.fly.api.socket.util;
 
 import static org.jboss.netty.channel.Channels.pipeline;
 
