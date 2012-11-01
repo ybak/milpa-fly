@@ -14,7 +14,7 @@ import org.jboss.netty.logging.Log4JLoggerFactory;
 
 import com.corntree.milpa.fly.protocol.request.Request.ClientRequest;
 import com.corntree.milpa.fly.protocol.request.Request.ClientRequestType;
-import com.corntree.milpa.fly.protocol.request.Request.RegistRequest;
+import com.corntree.milpa.fly.protocol.request.Request.DummyRequest;
 import com.google.protobuf.ByteString;
 
 public class SocketClient {
@@ -46,9 +46,9 @@ public class SocketClient {
         SocketClientHandler handler = channel.getPipeline().get(SocketClientHandler.class);
         long now = System.currentTimeMillis();
         for (int i = 0; i < 1000; i++) {
-            ByteString data = RegistRequest.newBuilder().setUsername("ybak").setPassword("passwd")
+            ByteString data = DummyRequest.newBuilder().setUsername("ybak").setPassword("passwd")
                     .setEmail("ybak@mail.com").build().toByteString();
-            handler.sendRequest(ClientRequest.newBuilder().setClientRequestType(ClientRequestType.REGIST_REQUEST)
+            handler.sendRequest(ClientRequest.newBuilder().setClientRequestType(ClientRequestType.DUMMY_REQUEST)
                     .setPacketData(data).build());
         }
         while (handler.getResponseCounter().intValue() != 1000) {

@@ -38,8 +38,4 @@ public class SocketServer {
         bootstrap.bind(new InetSocketAddress(socketServerPort));
         logger.info("Socket server started, listening on :" + socketServerPort);
     }
-
-    public static void main(String[] args) {
-        new SocketServer().start();
-    }
 }
