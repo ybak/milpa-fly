@@ -21,12 +21,13 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id",columnDefinition="int(11)")
+    @Column(name = "id", columnDefinition = "int(11)")
     private Long id;
 
     @Column(unique = true, length = 50)
     private String username;
 
+    @Column(length = 64)
     private String hashedPassword;
 
     @Column(length = 30)
@@ -69,4 +70,5 @@ public class Account {
         List<Account> resultList = query.getResultList();
         return resultList.size() == 0 ? null : resultList.get(0);
     }
+    
 }

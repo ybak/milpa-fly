@@ -3,6 +3,7 @@ package com.corntree.milpa.fly.service;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.corntree.milpa.fly.common.ValidateUtil;
 import com.corntree.milpa.fly.domain.Account;
@@ -20,6 +21,7 @@ public class AccountService {
     @Autowired
     private SessionService sessionService;
 
+    @Transactional
     public boolean registAccount(String username, String password, String email) throws BadRequestExecption {
         logger.info("regitst account for " + username);
         if (!ValidateUtil.isValidEmail(email)) {
@@ -30,8 +32,9 @@ public class AccountService {
         }
         Account account = new Account(username, password, email);
         account.persist();
-        Player player = new Player();
+        Player player = new Player("newPlayer",account);
         player.persist();
+        account.setCurrentPlayer(player);
         return true;
     }
 

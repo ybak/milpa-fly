@@ -14,16 +14,23 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooJpaActiveRecord
 public class Player {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id",columnDefinition="int(11)")
+    @Column(name = "id", columnDefinition = "int(11)")
     private Long id;
 
     private String displayName;
 
     @ManyToOne
     private Account account;
-    
-    
+
+    public Player() {
+    }
+
+    public Player(String displayName, Account account) {
+        this.displayName = displayName;
+        this.account = account;
+    }
+
 }

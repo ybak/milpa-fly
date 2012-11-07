@@ -15,7 +15,7 @@ public class AccountIntegrationTest {
 
     @Test
     public void test() {
-        boolean isUsernameUsed = Account.isUsernameUsed("ybak");
+        boolean isUsernameUsed = Account.isUsernameUsed("usernotexist");
         Assert.assertFalse(isUsernameUsed);
     }
 }

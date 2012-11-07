@@ -23,7 +23,7 @@ public class RequestDispatcher {
 
     public void dispatchClientRequest(final ClientRequest clientRequest, final Channel channel) {
         ClientRequestType clientRequestType = clientRequest.getClientRequestType();
-        logger.info(clientRequestType);
+        logger.info(clientRequest);
         String requestTypeName = clientRequestType.name();
         RequestHandler requestHandler = applicationContext.getBean(requestTypeName, RequestHandler.class);
         try {

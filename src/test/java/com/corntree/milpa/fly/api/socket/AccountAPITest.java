@@ -18,6 +18,7 @@ import com.corntree.milpa.fly.api.socket.util.SocketClientUtil;
 import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequest;
 import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequestType;
 import com.corntree.milpa.fly.protocol.ClientPacket.LoginRequest;
+import com.corntree.milpa.fly.protocol.ClientPacket.RegistRequest;
 import com.corntree.milpa.fly.protocol.ServerPacket.ResponseCode;
 import com.corntree.milpa.fly.protocol.ServerPacket.ServerResponse;
 
@@ -28,18 +29,44 @@ public class AccountAPITest {
     private static final InetSocketAddress REMOTE_ADDRESS = new InetSocketAddress("localhost", 8081);
 
     @Test
+    public void regiestRequestTest() throws Exception {
+        new SocketClientUtil() {
+            public void sendRequest(SocketClientHandler handler) throws Exception {
+                RegistRequest registRequest = RegistRequest.newBuilder().setUsername("ybak").setEmail("ybak@mai.com")
+                        .setPassword("password").build();
+
+                ClientRequest clientRequest = ClientRequest.newBuilder()
+                        .setClientRequestType(ClientRequestType.REGIST_REQUEST)
+                        .setRequestData(registRequest.toByteString()).build();
+                ServerResponse serverResponse = handler.requestAndGet(clientRequest);
+                Assert.assertEquals(ResponseCode.OK, serverResponse.getCode());
+
+                serverResponse = handler.requestAndGet(clientRequest);
+                Assert.assertEquals(ResponseCode.BAD_PARAMETER_USERNAME_EXIST, serverResponse.getCode());
+            }
+        }.doTest();
+    }
+
+    @Test
     public void loginRequestTest() throws Exception {
         new SocketClientUtil() {
             public void sendRequest(SocketClientHandler handler) throws Exception {
-                LoginRequest loginRequest = LoginRequest.newBuilder().setUsername("ybak").setPassword("password")
+                LoginRequest loginRequest = LoginRequest.newBuilder().setUsername("ybak").setPassword("badpassword")
                         .build();
                 ClientRequest clientRequest = ClientRequest.newBuilder()
                         .setClientRequestType(ClientRequestType.LOGIN_REQUEST)
                         .setRequestData(loginRequest.toByteString()).build();
                 ServerResponse serverResponse = handler.requestAndGet(clientRequest);
-                logger.warn(serverResponse);
                 Assert.assertEquals(ResponseCode.BAD_PARAMETER_LOGIN, serverResponse.getCode());
                 Assert.assertNotNull(serverResponse.getDesc());
+                
+                loginRequest = LoginRequest.newBuilder().setUsername("ybak").setPassword("password")
+                        .build();
+                clientRequest = ClientRequest.newBuilder()
+                        .setClientRequestType(ClientRequestType.LOGIN_REQUEST)
+                        .setRequestData(loginRequest.toByteString()).build();
+                serverResponse = handler.requestAndGet(clientRequest);
+                Assert.assertEquals(ResponseCode.OK, serverResponse.getCode());
             }
         }.doTest();
     }
@@ -51,13 +78,12 @@ public class AccountAPITest {
         InputStream inputStream = socket.getInputStream();
         OutputStream outputStream = socket.getOutputStream();
 
-        LoginRequest loginRequest = LoginRequest.newBuilder().setUsername("ybak").setPassword("password").build();
+        LoginRequest loginRequest = LoginRequest.newBuilder().setUsername("ybak").setPassword("badpassword").build();
         ClientRequest clientRequest = ClientRequest.newBuilder().setClientRequestType(ClientRequestType.LOGIN_REQUEST)
                 .setRequestData(loginRequest.toByteString()).build();
         clientRequest.writeDelimitedTo(outputStream);
 
         ServerResponse serverResponse = ServerResponse.parseDelimitedFrom(inputStream);
-        logger.warn(serverResponse);
         Assert.assertEquals(ResponseCode.BAD_PARAMETER_LOGIN, serverResponse.getCode());
 
         socket.close();
