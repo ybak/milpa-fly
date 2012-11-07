@@ -6,31 +6,15 @@ package com.corntree.milpa.fly.domain;
 import com.corntree.milpa.fly.domain.Player;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Player_Roo_Jpa_Entity {
     
     declare @type: Player: @Entity;
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long Player.id;
-    
     @Version
     @Column(name = "version")
     private Integer Player.version;
-    
-    public Long Player.getId() {
-        return this.id;
-    }
-    
-    public void Player.setId(Long id) {
-        this.id = id;
-    }
     
     public Integer Player.getVersion() {
         return this.version;

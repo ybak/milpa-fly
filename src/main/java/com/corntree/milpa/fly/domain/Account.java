@@ -1,11 +1,14 @@
 package com.corntree.milpa.fly.domain;
 
 import java.util.List;
+
 import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.TypedQuery;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
@@ -16,16 +19,21 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaActiveRecord
 public class Account {
 
-    @Column(unique = true, length = 50)
-    public String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id",columnDefinition="int(11)")
+    private Long id;
 
-    public String hashedPassword;
+    @Column(unique = true, length = 50)
+    private String username;
+
+    private String hashedPassword;
 
     @Column(length = 30)
-    public String email;
-    
+    private String email;
+
     @OneToOne
-    public Player currentPlayer;
+    private Player currentPlayer;
 
     public Account() {
     }
@@ -46,13 +54,17 @@ public class Account {
     }
 
     public static boolean isUsernameUsed(String username) {
-        TypedQuery<Boolean> query = entityManager().createQuery("SELECT case when (count(*) > 0)  then true else false end  FROM Account o where o.username = :username", Boolean.class);
+        TypedQuery<Boolean> query = entityManager()
+                .createQuery(
+                        "SELECT case when (count(*) > 0)  then true else false end  FROM Account o where o.username = :username",
+                        Boolean.class);
         query.setParameter("username", username);
         return query.getResultList().get(0);
     }
 
-    public static com.corntree.milpa.fly.domain.Account findAccountByUsername(String username) {
-        TypedQuery<Account> query = entityManager().createQuery("SELECT o FROM Account o where o.username = :username", Account.class);
+    public static Account findAccountByUsername(String username) {
+        TypedQuery<Account> query = entityManager().createQuery("SELECT o FROM Account o where o.username = :username",
+                Account.class);
         query.setParameter("username", username);
         List<Account> resultList = query.getResultList();
         return resultList.size() == 0 ? null : resultList.get(0);

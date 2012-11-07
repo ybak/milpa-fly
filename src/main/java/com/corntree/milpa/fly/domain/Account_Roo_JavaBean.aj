@@ -8,6 +8,14 @@ import com.corntree.milpa.fly.domain.Player;
 
 privileged aspect Account_Roo_JavaBean {
     
+    public Long Account.getId() {
+        return this.id;
+    }
+    
+    public void Account.setId(Long id) {
+        this.id = id;
+    }
+    
     public String Account.getUsername() {
         return this.username;
     }

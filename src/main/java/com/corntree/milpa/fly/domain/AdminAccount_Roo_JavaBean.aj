@@ -7,6 +7,14 @@ import com.corntree.milpa.fly.domain.AdminAccount;
 
 privileged aspect AdminAccount_Roo_JavaBean {
     
+    public Long AdminAccount.getId() {
+        return this.id;
+    }
+    
+    public void AdminAccount.setId(Long id) {
+        this.id = id;
+    }
+    
     public String AdminAccount.getUsername() {
         return this.username;
     }

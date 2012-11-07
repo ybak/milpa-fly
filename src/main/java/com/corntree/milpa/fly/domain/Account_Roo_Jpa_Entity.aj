@@ -6,31 +6,15 @@ package com.corntree.milpa.fly.domain;
 import com.corntree.milpa.fly.domain.Account;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Version;
 
 privileged aspect Account_Roo_Jpa_Entity {
     
     declare @type: Account: @Entity;
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long Account.id;
-    
     @Version
     @Column(name = "version")
     private Integer Account.version;
-    
-    public Long Account.getId() {
-        return this.id;
-    }
-    
-    public void Account.setId(Long id) {
-        this.id = id;
-    }
     
     public Integer Account.getVersion() {
         return this.version;
