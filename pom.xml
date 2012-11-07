@@ -14,6 +14,8 @@
         <roo.version>1.2.2.RELEASE</roo.version>
         <slf4j.version>1.6.4</slf4j.version>
         <spring.version>3.1.1.RELEASE</spring.version>
+        <war.name>milpa-fly</war.name>
+        <integrationtest.exclude>%regex[.*[Integration|API].*Test.*]</integrationtest.exclude>
     </properties>
     <repositories>
         <repository>
@@ -319,11 +321,13 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
+             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.2</version>
-                <!-- <configuration> <webXml>target/web.xml</webXml> </configuration> -->
+                <configuration>
+                    <warName>${war.name}</warName>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -441,10 +445,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12</version>
                 <configuration>
-                    <printSummary>false</printSummary>
+                    <printSummary>true</printSummary>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <excludes>
                         <exclude>**/*_Roo_*</exclude>
+                        <exclude>${integrationtest.exclude}</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -547,4 +552,104 @@
             </plugins>
         </pluginManagement>
     </build>
+    <profiles>
+        <profile>
+            <id>test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>hibernate3-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <executions>
+                            <execution>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>hbm2ddl</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <components>
+                                <component>
+                                    <name>hbm2ddl</name>
+                                    <implementation>jpaconfiguration</implementation>
+                                </component>
+                            </components>
+                            <componentProperties>
+                                <persistenceunit>persistenceUnit</persistenceunit>
+                                <outputfilename>milpa_fly_schema.sql</outputfilename>
+                                <drop>false</drop>
+                                <create>true</create>
+                                <export>false</export>
+                                <format>true</format>
+                            </componentProperties>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <version>1.5</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>5.1.13</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <driver>com.mysql.jdbc.Driver</driver>
+                            <url>jdbc:mysql://localhost:3306/milpa_fly_test</url>
+                            <username>test</username>
+                            <password>test</password>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>drop-db-before-test-if-any</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <url>jdbc:mysql://localhost:3306/</url>
+                                    <sqlCommand>DROP DATABASE `milpa_fly_test`</sqlCommand>
+                                    <onError>continue</onError>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>create-db</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <url>jdbc:mysql://localhost:3306/</url>
+                                    <sqlCommand>CREATE DATABASE `milpa_fly_test` /*!40100 CHARACTER SET utf8 COLLATE
+                                        utf8_general_ci */</sqlCommand>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>clean_insert</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <srcFiles>
+                                        <srcFile>target/hibernate3/sql/milpa_fly_schema.sql</srcFile>
+                                        <srcFile>src/test/resources/data/test_data.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+            <properties>
+                    <integrationtest.exclude>none</integrationtest.exclude>
+                    <war.name>milpa-fly-test</war.name>
+            </properties>
+        </profile>
+    </profiles>
 </project>

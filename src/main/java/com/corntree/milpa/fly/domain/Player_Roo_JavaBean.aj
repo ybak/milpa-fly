@@ -3,6 +3,7 @@
 
 package com.corntree.milpa.fly.domain;
 
+import com.corntree.milpa.fly.domain.Account;
 import com.corntree.milpa.fly.domain.Player;
 
 privileged aspect Player_Roo_JavaBean {
@@ -13,6 +14,14 @@ privileged aspect Player_Roo_JavaBean {
     
     public void Player.setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+    
+    public Account Player.getAccount() {
+        return this.account;
+    }
+    
+    public void Player.setAccount(Account account) {
+        this.account = account;
     }
     
 }

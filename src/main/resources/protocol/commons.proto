@@ -9,3 +9,7 @@ enum PayloadType {
 message Token {
   required string token = 1;
 }
+
+message Player {
+  required string displayName = 1;
+}

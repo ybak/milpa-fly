@@ -7,9 +7,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.corntree.milpa.fly.api.socket.handler.RequestHandler;
+import com.corntree.milpa.fly.api.socket.util.ResponseFactory;
 import com.corntree.milpa.fly.api.socket.util.Responses;
 import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequest;
 import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequestType;
+import com.corntree.milpa.fly.protocol.ServerPacket.ResponseCode;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 @Component
@@ -28,7 +30,9 @@ public class RequestDispatcher {
             requestHandler.handleRequestData(clientRequest.getRequestData(), channel);
         } catch (InvalidProtocolBufferException e) {
             channel.write(Responses.RESPONSE_BAD_PROTOCOL);
+        } catch (Exception e) {
+            logger.error("internal error", e);
+            channel.write(ResponseFactory.buildServerResponse(ResponseCode.ERROR_UNKOWN));
         }
     }
 }
-

@@ -1,5 +1,7 @@
 package com.corntree.milpa.fly.domain;
 
+import javax.persistence.ManyToOne;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.activerecord.RooJpaActiveRecord;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -9,6 +11,10 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJpaActiveRecord
 public class Player {
 
-    public String displayName;
+    private String displayName;
+
+    @ManyToOne
+    private Account account;
+    
     
 }

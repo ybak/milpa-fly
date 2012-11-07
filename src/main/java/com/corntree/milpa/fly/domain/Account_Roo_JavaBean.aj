@@ -32,12 +32,12 @@ privileged aspect Account_Roo_JavaBean {
         this.email = email;
     }
     
-    public Player Account.getPlayer() {
-        return this.player;
+    public Player Account.getCurrentPlayer() {
+        return this.currentPlayer;
     }
     
-    public void Account.setPlayer(Player player) {
-        this.player = player;
+    public void Account.setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
     
 }

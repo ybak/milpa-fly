@@ -55,6 +55,7 @@ public class SocketClientHandler extends SimpleChannelUpstreamHandler {
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, final MessageEvent e) {
+        logger.info(e.getMessage());
         responses.add((ServerResponse) e.getMessage());
         responseCounter.incrementAndGet();
     }

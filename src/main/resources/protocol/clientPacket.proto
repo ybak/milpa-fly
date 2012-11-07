@@ -31,4 +31,5 @@ message RegistRequest {
 message LoginRequest {
   required string username = 1;//用户名
   required string password = 2;//密码
+  optional int64 playerId = 3;
 }//登录请求

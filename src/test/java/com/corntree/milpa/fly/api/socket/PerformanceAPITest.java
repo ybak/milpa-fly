@@ -41,6 +41,7 @@ public class PerformanceAPITest {
                 while (handler.getResponseCounter().intValue() != TOTAL_COUNT_DUMMY_REQUESTS) {
                     TimeUnit.MILLISECONDS.sleep(10);
                 }
+                // time with logging info: 900
                 // time without logging: 300
                 logger.warn("Time of send 1000 dummy requests spend : " + (System.currentTimeMillis() - now));
             }

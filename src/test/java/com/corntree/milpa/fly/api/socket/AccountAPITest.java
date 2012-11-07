@@ -28,7 +28,7 @@ public class AccountAPITest {
     private static final InetSocketAddress REMOTE_ADDRESS = new InetSocketAddress("localhost", 8081);
 
     @Test
-    public void loginRequestTestWithNetty() throws Exception {
+    public void loginRequestTest() throws Exception {
         new SocketClientUtil() {
             public void sendRequest(SocketClientHandler handler) throws Exception {
                 LoginRequest loginRequest = LoginRequest.newBuilder().setUsername("ybak").setPassword("password")
@@ -39,12 +39,13 @@ public class AccountAPITest {
                 ServerResponse serverResponse = handler.requestAndGet(clientRequest);
                 logger.warn(serverResponse);
                 Assert.assertEquals(ResponseCode.BAD_PARAMETER_LOGIN, serverResponse.getCode());
+                Assert.assertNotNull(serverResponse.getDesc());
             }
         }.doTest();
     }
 
     @Test
-    public void loginRequestTest() throws Exception {
+    public void loginRequestTestBlockingIO() throws Exception {
         Socket socket = new Socket();
         socket.connect(REMOTE_ADDRESS);
         InputStream inputStream = socket.getInputStream();
