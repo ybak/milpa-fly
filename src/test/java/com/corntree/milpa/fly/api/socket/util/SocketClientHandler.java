@@ -30,7 +30,7 @@ public class SocketClientHandler extends SimpleChannelUpstreamHandler {
         return responseCounter;
     }
 
-    public ServerResponse requestAndGet(ClientRequest request) throws Exception {
+    public ServerResponse sendAndGet(ClientRequest request) throws Exception {
         channel.write(request);
         return responses.take();
     }

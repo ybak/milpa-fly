@@ -13,5 +13,7 @@ public class Responses {
             .setCode(ResponseCode.BAD_PARAMETER_USERNAME_EXIST).build();
     public static final ServerResponse RESPONSE_BAD_PARAMETER_LOGIN = ServerResponse.newBuilder()
             .setCode(ResponseCode.BAD_PARAMETER_LOGIN).build();
+    public static final ServerResponse RESPONSE_BAD_PARAMETER_TOKEN = ServerResponse.newBuilder()
+            .setCode(ResponseCode.BAD_PARAMETER_TOKEN).build();
 
 }

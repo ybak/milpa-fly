@@ -8,6 +8,7 @@ enum ClientRequestType {
   DUMMY_REQUEST = 0;
   REGIST_REQUEST = 1;
   LOGIN_REQUEST = 2;
+  GET_NOTIFICATION_REQUEST = 3;
 }//请求类型
 
 message ClientRequest {

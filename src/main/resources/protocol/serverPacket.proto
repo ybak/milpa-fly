@@ -12,6 +12,7 @@ enum ResponseCode {
     BAD_PARAMETER_USERNAME = 4;
     BAD_PARAMETER_USERNAME_EXIST = 5;
     BAD_PARAMETER_LOGIN = 6;
+    BAD_PARAMETER_TOKEN = 7;
 }
 
 message ServerResponse {

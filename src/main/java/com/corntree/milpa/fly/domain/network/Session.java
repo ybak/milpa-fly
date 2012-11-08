@@ -1,8 +1,11 @@
-package com.corntree.milpa.fly.domain;
+package com.corntree.milpa.fly.domain.network;
 
 import java.util.Date;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
+import com.corntree.milpa.fly.domain.Account;
+import com.corntree.milpa.fly.domain.Player;
 
 public class Session {
 
@@ -10,6 +13,7 @@ public class Session {
     private Date loginTime;
     private Account account;
     private Player player;
+    private Notifier notifier; 
 
     public Session(Account account, Player player) {
         this.account = account;
@@ -32,6 +36,10 @@ public class Session {
 
     public Player getPlayer() {
         return player;
+    }
+    
+    public void notify(Object message){
+        notifier.notify(message);
     }
 
 }

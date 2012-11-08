@@ -38,10 +38,10 @@ public class AccountAPITest {
                 ClientRequest clientRequest = ClientRequest.newBuilder()
                         .setClientRequestType(ClientRequestType.REGIST_REQUEST)
                         .setRequestData(registRequest.toByteString()).build();
-                ServerResponse serverResponse = handler.requestAndGet(clientRequest);
+                ServerResponse serverResponse = handler.sendAndGet(clientRequest);
                 Assert.assertEquals(ResponseCode.OK, serverResponse.getCode());
 
-                serverResponse = handler.requestAndGet(clientRequest);
+                serverResponse = handler.sendAndGet(clientRequest);
                 Assert.assertEquals(ResponseCode.BAD_PARAMETER_USERNAME_EXIST, serverResponse.getCode());
             }
         }.doTest();
@@ -56,7 +56,7 @@ public class AccountAPITest {
                 ClientRequest clientRequest = ClientRequest.newBuilder()
                         .setClientRequestType(ClientRequestType.LOGIN_REQUEST)
                         .setRequestData(loginRequest.toByteString()).build();
-                ServerResponse serverResponse = handler.requestAndGet(clientRequest);
+                ServerResponse serverResponse = handler.sendAndGet(clientRequest);
                 Assert.assertEquals(ResponseCode.BAD_PARAMETER_LOGIN, serverResponse.getCode());
                 Assert.assertNotNull(serverResponse.getDesc());
                 
@@ -65,7 +65,7 @@ public class AccountAPITest {
                 clientRequest = ClientRequest.newBuilder()
                         .setClientRequestType(ClientRequestType.LOGIN_REQUEST)
                         .setRequestData(loginRequest.toByteString()).build();
-                serverResponse = handler.requestAndGet(clientRequest);
+                serverResponse = handler.sendAndGet(clientRequest);
                 Assert.assertEquals(ResponseCode.OK, serverResponse.getCode());
             }
         }.doTest();
