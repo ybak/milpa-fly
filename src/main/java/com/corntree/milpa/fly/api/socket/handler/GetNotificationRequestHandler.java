@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 import org.springframework.stereotype.Component;
 
+import com.corntree.milpa.fly.api.socket.util.Responses;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -15,6 +16,7 @@ public class GetNotificationRequestHandler implements RequestHandler{
     @Override
     public void handleRequestData(ByteString packetData, Channel channel) throws InvalidProtocolBufferException {
             logger.warn("you get here.");
+            channel.write(Responses.RESPONSE_OK);
     }
 
 }
