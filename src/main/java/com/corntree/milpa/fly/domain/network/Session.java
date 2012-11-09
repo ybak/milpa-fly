@@ -13,6 +13,8 @@ public class Session {
     private Date loginTime;
     private Account account;
     private Player player;
+    //TODO 1. How to register Netty channel to Session? 2. how to close session when channel close? 
+    
     private Notifier notifier; 
 
     public Session(Account account, Player player) {
