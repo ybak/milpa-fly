@@ -2,6 +2,7 @@ package com.corntree.milpa.fly.api.socket.util;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
@@ -14,6 +15,7 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import com.corntree.milpa.fly.protocol.ClientPacket.ClientRequest;
+import com.corntree.milpa.fly.protocol.ServerPacket.ResponseCode;
 import com.corntree.milpa.fly.protocol.ServerPacket.ServerResponse;
 
 public class SocketClientHandler extends SimpleChannelUpstreamHandler {
@@ -33,6 +35,11 @@ public class SocketClientHandler extends SimpleChannelUpstreamHandler {
     public ServerResponse sendAndGet(ClientRequest request) throws Exception {
         channel.write(request);
         return responses.take();
+    }
+
+    public ServerResponse sendAndGet(ClientRequest request, int waitSeconds) throws Exception {
+        channel.write(request);
+        return responses.poll(waitSeconds, TimeUnit.SECONDS);
     }
 
     public void sendRequest(ClientRequest request) throws Exception {
@@ -63,6 +70,7 @@ public class SocketClientHandler extends SimpleChannelUpstreamHandler {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
         logger.warn("Unexpected exception from downstream.", e.getCause());
+        responses.add(ServerResponse.newBuilder().setCode(ResponseCode.ERROR_UNKOWN).build());
         e.getChannel().close();
     }
 }

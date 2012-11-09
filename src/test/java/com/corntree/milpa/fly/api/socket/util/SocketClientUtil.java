@@ -3,6 +3,8 @@ package com.corntree.milpa.fly.api.socket.util;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
+import junit.framework.Assert;
+
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -20,6 +22,7 @@ public abstract class SocketClientUtil {
         ClientBootstrap bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(
                 Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
         bootstrap.setPipelineFactory(new SocketClientPipelineFactory());
+        
         ChannelFuture connectFuture = bootstrap.connect(REMOTE_ADDRESS);
         Channel channel = connectFuture.awaitUninterruptibly().getChannel();
         SocketClientHandler handler = channel.getPipeline().get(SocketClientHandler.class);
@@ -28,6 +31,7 @@ public abstract class SocketClientUtil {
             sendRequest(handler);
         } catch (Exception e) {
             logger.error(e);
+            Assert.fail(e.getMessage());
         }
 
         channel.close().awaitUninterruptibly();

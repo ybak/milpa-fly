@@ -9,13 +9,20 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.jboss.netty.handler.logging.LoggingHandler;
+import org.jboss.netty.handler.timeout.ReadTimeoutHandler;
+import org.jboss.netty.util.HashedWheelTimer;
+import org.jboss.netty.util.Timer;
 
 import com.corntree.milpa.fly.protocol.ServerPacket;
 
 public class SocketClientPipelineFactory implements ChannelPipelineFactory {
 
+    private Timer timer = new HashedWheelTimer();
+
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
+
+        p.addLast("timeoutHandler", new ReadTimeoutHandler(timer, 5));
         p.addLast("log", new LoggingHandler());
         p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
         p.addLast("protobufDecoder", new ProtobufDecoder(ServerPacket.ServerResponse.getDefaultInstance()));

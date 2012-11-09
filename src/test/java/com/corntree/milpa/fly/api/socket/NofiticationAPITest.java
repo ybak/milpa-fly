@@ -40,7 +40,7 @@ public class NofiticationAPITest {
 
                 clientRequest = ClientRequest.newBuilder()
                         .setClientRequestType(ClientRequestType.GET_NOTIFICATION_REQUEST).setToken(token.getToken()).build();
-                serverResponse = handler.sendAndGet(clientRequest);
+                serverResponse = handler.sendAndGet(clientRequest, 3);
                 Assert.assertEquals(ResponseCode.OK, serverResponse.getCode());
             }
         }.doTest();
